@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title%} Join Reboot {% endblock %}
+{% block content %} 
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm p-4">
+            <h2 class="fw-bold text-center mb-1">Join Reboot</h2>
+            <p class="text-muted text-center mb-4">
+                You are not alone. Let's restart together.
+            </p>
+            <form method = "POST">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-3">
+                           <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small mt-1">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-dark w-100 mt-2">
+                    Create My Account
+                </button>
+            </form>
+            <p class="text-center mt-3 text-muted small">
+                Already have an account? 
+                <a href="{% url 'accounts:login' %}" class="text-dark">Log in</a>
+            </p>
+         </div>
+    </div>
+</div>
+{% endblock %}
