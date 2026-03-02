@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import RegisterForm
+from .forms import RegisterForm, CareerGapProfileForm, MentorProfileForm
 
 def register_view(request):
     if request.user.is_authenticated:
@@ -42,3 +43,34 @@ def logout_view(request):
     logout(request)
     messages.info(request, "You have been logged out.")
     return redirect('core:home')
+
+@login_required
+def profile_view(request):
+    profile = request.user.careergapprofile
+
+    if request.method == "POST":
+        form = CareerGapProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your profile has been updated!")
+            return redirect('accounts:profile')
+    else:
+        form = CareerGapProfileForm(instance=profile)
+
+    return render(request, 'accounts/profile.html', {'form': form, 'profile': profile})
+
+@login_required
+def mentor_profile_view(request):
+    profile = request.user.mentorprofile
+
+    if request.method == 'POST':
+        form = MentorProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your profile has been updated!")
+            return redirect('accounts:mentor_profile')
+        
+    else:
+        form = MentorProfileForm(instance=profile)
+    
+    return render(request, 'accounts/mentor_profile.html', {'form': form, 'profile':profile})
