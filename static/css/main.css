@@ -1,0 +1,122 @@
+
+/* Reboot Color Palette */
+:root {
+    --reboot-primary: #7C6BAF;      /* soft purple */
+    --reboot-primary-dark: #6355A4; /* slightly deeper for hover */
+    --reboot-primary-light: #EEE9FF; /* very light purple for backgrounds */
+    --reboot-accent: #B8A9E3;       /* pastel purple for badges/highlights */
+    --reboot-text: #3D3557;         /* dark purple for headings */
+    --reboot-muted: #9B92B8;        /* muted purple for secondary text */
+}
+
+/* Body */
+body {
+    background-color: #F9F7FF;      /* ultra light purple background */
+    color: var(--reboot-text);
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--reboot-primary) !important;
+}
+
+/* Primary Buttons */
+.btn-dark {
+    background-color: var(--reboot-primary) !important;
+    border-color: var(--reboot-primary) !important;
+    color: white !important;
+}
+.btn-dark:hover {
+    background-color: var(--reboot-primary-dark) !important;
+    border-color: var(--reboot-primary-dark) !important;
+}
+
+/* Outline Buttons */
+.btn-outline-light {
+    border-color: white !important;
+    color: white !important;
+}
+.btn-outline-light:hover {
+    background-color: white !important;
+    color: var(--reboot-primary) !important;
+}
+
+/* Cards */
+.card {
+    border-radius: 16px !important;
+    background-color: white;
+}
+.card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
+}
+
+/* Progress Bar */
+.progress-bar.bg-dark {
+    background-color: var(--reboot-primary) !important;
+}
+
+/* Progress circle border */
+[style*="border: 6px solid #212529"] {
+    border-color: var(--reboot-primary) !important;
+}
+
+/* Badges */
+.badge.bg-dark {
+    background-color: var(--reboot-primary) !important;
+}
+
+/* Profile card left border */
+[style*="border-left: 4px solid #212529"] {
+    border-left-color: var(--reboot-primary) !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5 {
+    color: var(--reboot-text);
+}
+
+/* Footer */
+footer {
+    background-color: var(--reboot-primary) !important;
+}
+
+/* Hero section background */
+.hero-section {
+    background-color: var(--reboot-primary-light);
+    border-radius: 24px;
+    padding: 60px 40px;
+}
+
+/* Links */
+a {
+    color: var(--reboot-primary);
+}
+a:hover {
+    color: var(--reboot-primary-dark);
+}
+
+/* Form controls focus */
+.form-control:focus {
+    border-color: var(--reboot-accent);
+    box-shadow: 0 0 0 0.2rem rgba(124, 107, 175, 0.25);
+}
+
+/* Alert success */
+.alert-success {
+    background-color: var(--reboot-primary-light);
+    border-color: var(--reboot-accent);
+    color: var(--reboot-text);
+}
+
+.alert-info {
+    background-color: var(--reboot-primary-light);
+    border-color: var(--reboot-accent);
+    color: var(--reboot-text);
+}
+
+.alert-warning {
+    background-color: var(--reboot-primary-light);
+    border-color: var(--reboot-accent);
+    color: var(--reboot-text);
+}

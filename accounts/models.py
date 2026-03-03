@@ -29,6 +29,10 @@ class CareerGapProfile(models.Model):
 
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(
+    upload_to='profile_pictures/',
+    blank=True,
+    null=True)
     employment_status = models.CharField(
         max_length=20,
         choices = EmploymentStatus.choices,
@@ -44,6 +48,16 @@ class CareerGapProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.name}'s Profile"
+    
+    def get_completion_percentage(self):
+        completed = 0
+        if self.employment_status: completed += 20
+        if self.education: completed += 20
+        if self.gap_story: completed += 20
+        if self.gap_duration: completed += 20
+        if self.projects: completed += 20
+        return completed
+
     
 
 class MentorProfile(models.Model):

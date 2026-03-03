@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-
+from accounts.models import User
 
 # Create your views here.
 def home(request):
@@ -8,4 +8,12 @@ def home(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'core/dashboard.html')
+    context = {}
+
+    if request.user.role == 'career_gaper':
+        context['profile'] = request.user.careergapprofile
+
+    elif request.user.role == 'mentor':
+        context['career_gapers'] = User.objects.filter(role = 'career_gaper')
+
+    return render(request, 'core/dashboard.html', context)

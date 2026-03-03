@@ -51,6 +51,12 @@ class RegisterForm(UserCreationForm):
     
 class CareerGapProfileForm(forms.ModelForm):
 
+
+    profile_picture = forms.ImageField(
+    required=False,
+    widget=forms.FileInput(attrs={
+        'class': 'form-control'
+    }))
     employment_status = forms.ChoiceField(
         choices=CareerGapProfile.EmploymentStatus.choices,
         widget=forms.Select(attrs={'class': 'form-control'})
@@ -118,6 +124,7 @@ class CareerGapProfileForm(forms.ModelForm):
     class Meta:
         model = CareerGapProfile
         fields = [
+            'profile_picture',
             'employment_status',
             'education',
             'prior_experience',

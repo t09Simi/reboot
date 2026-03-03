@@ -49,7 +49,7 @@ def profile_view(request):
     profile = request.user.careergapprofile
 
     if request.method == "POST":
-        form = CareerGapProfileForm(request.POST, instance=profile)
+        form = CareerGapProfileForm(request.POST,request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             messages.success(request, "Your profile has been updated!")
