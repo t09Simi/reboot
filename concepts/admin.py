@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Domain, JobRole, SkillCategory, Skill, UserSkillAssessment
+from .models import Domain, JobRole, SkillCategory, Skill
 
 # Register your models here.
 @admin.register(Domain)
@@ -17,7 +17,3 @@ class SkillCategoryAdmin(admin.ModelAdmin):
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
     list_display = ('name','category','job_role' )
-
-@admin.register(UserSkillAssessment)
-class UserSkillAssessmentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'skill')

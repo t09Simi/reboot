@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ job_role.title }} - Job Role{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row mb-4">
+        <!-- Left Side: Job Title and Description -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h1 class="card-title mb-3">{{ job_role.title }}</h1>
+                    <p class="text-muted lead">{{ job_role.description }}</p>
+                    
+                    {% if job_role.domain %}
+                        <div class="mt-4">
+                            <h6 class="text-muted text-uppercase small">Domain</h6>
+                            <p class="mb-0">
+                                <span class="badge" style="background-color: var(--reboot-primary);">
+                                    {% if job_role.domain.icon %}{{ job_role.domain.icon }}{% endif %}
+                                    {{ job_role.domain.name }}
+                                </span>
+                            </p>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="mt-4">
+                        <a href="{% url 'concepts:job_roles_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Skills -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header text-white" style="background-color: var(--reboot-primary);">
+                    <h5 class="mb-0">Technical Skills</h5>
+                </div>
+                <div class="card-body">
+                    {% if job_skills %}
+                        {% regroup job_skills by category.name as skills_by_category %}
+                        
+                        {% for category in skills_by_category %}
+                            <div class="mb-4">
+                                <h6 class="text-muted text-uppercase small mb-3">
+                                    {{ category.grouper|default:"Uncategorized" }}
+                                </h6>
+                                <div class="list-group list-group-flush">
+                                    {% for skill in category.list %}
+                                        <div class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center">
+                                            <span>{{ skill.name }}</span>
+                                            <span class="badge" style="background-color: var(--reboot-accent);  color: var(--reboot-text);">
+                                            {{ skill.get_importance_display }}</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center py-4">No skills defined yet for this role.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

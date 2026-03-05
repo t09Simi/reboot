@@ -14,6 +14,7 @@ def dashboard(request):
         context['profile'] = request.user.careergapprofile
 
     elif request.user.role == 'mentor':
+        # Get career gapers who have started filling their profile
         context['career_gapers'] = User.objects.filter(role = 'career_gaper')
 
     return render(request, 'core/dashboard.html', context)

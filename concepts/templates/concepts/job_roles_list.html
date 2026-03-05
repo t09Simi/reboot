@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Job Roles by Domain{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="mb-1">Job Roles by Domain</h1>
+            <p class="text-muted">Explore career opportunities organized by industry domain</p>
+        </div>
+    </div>
+
+    {% if domains %}
+        <div class="row">
+            {% for domain in domains %}
+                <div class="col-lg-8 mx-auto mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header text-white py-3" style="background-color: var(--reboot-primary);">
+                            <h5 class="mb-0">
+                                {% if domain.icon %}
+                                    <span class="me-2">{{ domain.icon }}</span>
+                                {% endif %}
+                                {{ domain.name }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% if domain.job_roles.all %}
+                                <div class="list-group list-group-flush">
+                                    {% for role in domain.job_roles.all %}
+                                        {% if role.is_active %}
+                                            <a href="{% url 'concepts:job_role_detail' role.pk %}" 
+                                               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-1">{{ role.title }}</h6>
+                                                    {% if role.description %}
+                                                        <p class="mb-0 text-muted small">{{ role.description|truncatewords:15 }}</p>
+                                                    {% endif %}
+                                                </div>
+                                                <span class="badge bg-secondary">View</span>
+                                            </a>
+                                        {% endif %}
+                                        <p class="text-muted text-center py-3">No job roles available for this domain.</p>
+                                    {% endfor %}
+                                    </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="alert alert-info text-center" role="alert">
+                    <h5>No domains available yet.</h5>
+                    <p class="mb-0">Please check back soon for available job roles.</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

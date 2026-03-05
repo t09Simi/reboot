@@ -47,9 +47,9 @@ class Skill(models.Model):
         PREFERRED = 'preferred', 'Preferred'
         BONUS = 'bonus', 'Bonus'
 
-    name = models.CharField(max_length=300, blank=True)
-    category = models.ForeignKey(SkillCategory, on_delete=models.CASCADE,related_name='skills')
-    job_role = models.ForeignKey(JobRole, on_delete=models.CASCADE, related_name='skills')
+    name = models.CharField(max_length=300)
+    category = models.ForeignKey(SkillCategory, on_delete=models.CASCADE,related_name='category_skills')
+    job_role = models.ForeignKey(JobRole, on_delete=models.CASCADE, related_name='role_skills')
     importance = models.CharField(
         max_length=20,
         choices=SkillImportance.choices,
@@ -59,18 +59,3 @@ class Skill(models.Model):
     def __str__(self):
         return f"{self.name} ({self.category})"
     
-class UserSkillAssessment(models.Model):
-
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='skill_assessments')
-    skill = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name='assessments')
-    knows_skill = models.BooleanField(default=True)
-    assessed_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'skill')
-
-    def __str__(self):
-        return f"{self.user.name} - {self.skill.name}"

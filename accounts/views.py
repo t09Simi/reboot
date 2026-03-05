@@ -46,6 +46,7 @@ def logout_view(request):
 
 @login_required
 def profile_view(request):
+    # This gives logged in users profile
     profile = request.user.careergapprofile
 
     if request.method == "POST":
