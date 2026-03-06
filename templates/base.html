@@ -13,31 +13,124 @@
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-    <a class="navbar-brand fw-bold" href="{% url 'core:home' %}">⚡ Reboot</a>
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="#">Roadmaps</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Community</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Mentorship</a></li>
+    <nav class="navbar navbar-expand-lg navbar-dark px-4">
+    <!-- Brand — links to dashboard if logged in, home if logged out -->
+    {% if request.user.is_authenticated %}
+        <a class="navbar-brand fw-bold" href="{% url 'core:dashboard' %}">⚡ Reboot</a>
+    {% else %}
+        <a class="navbar-brand fw-bold" href="{% url 'core:home' %}">⚡ Reboot</a>
+    {% endif %}
+
+    <!-- Mobile toggle -->
+    <button class="navbar-toggler" type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#navbarContent">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav ms-auto align-items-center">
+
             {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="#">{{ request.user.name }}</a>
+
+                {% if request.user.role == 'career_gaper' %}
+                    <!-- Career Gaper Nav -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:dashboard' %}">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'concepts:job_roles_list' %}">
+                            Explore Roles
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Community</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Find a Mentor</a>
+                    </li>
+
+                {% elif request.user.role == 'mentor' %}
+                    <!-- Mentor Nav -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:dashboard' %}">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Community</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">My Schedule</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Requests</a>
+                    </li>
+
+                {% endif %}
+
+                <!-- User dropdown — same for both roles -->
+                <li class="nav-item dropdown ms-2">
+                    <a class="nav-link dropdown-toggle fw-semibold" 
+                       href="#" 
+                       role="button" 
+                       data-bs-toggle="dropdown">
+                        {{ request.user.name }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        {% if request.user.role == 'career_gaper' %}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'accounts:profile' %}">
+                                    My Profile
+                                </a>
+                            </li>
+                        {% elif request.user.role == 'mentor' %}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'accounts:mentor_profile' %}">
+                                    My Profile
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" 
+                               href="{% url 'accounts:logout' %}">
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="btn btn-outline-light ms-2" href="{% url 'accounts:logout' %}">Logout</a>
-                </li>
+
             {% else %}
+                <!-- Logged out Nav -->
                 <li class="nav-item">
-                    <a class="btn btn-outline-light ms-2" href="{% url 'accounts:login' %}">Login</a>
+                    <a class="nav-link" href="#">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-light ms-2 text-dark" href="{% url 'accounts:register' %}">Join Reboot</a>
+                    <a class="btn btn-outline-light ms-2" 
+                       href="{% url 'accounts:login' %}">
+                        Login
+                    </a>
                 </li>
+                <li class="nav-item">
+                    <a class="btn btn-light ms-2 fw-semibold" 
+                       style="color: var(--reboot-primary);"
+                       href="{% url 'accounts:register' %}">
+                        Join Reboot
+                    </a>
+                </li>
+
             {% endif %}
+
         </ul>
     </div>
-    </nav>
+</nav>
+
 
     <!-- Main Content -->
     <main class="container mt-4">
