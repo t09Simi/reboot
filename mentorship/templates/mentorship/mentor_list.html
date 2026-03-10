@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}Find a Mentor — Reboot{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold mb-1">Find a Mentor</h2>
+            <p class="text-muted">
+                Connect with experienced professionals 
+                who've been where you want to go.
+            </p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% for mentor in mentors %}
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm p-4 h-100 mentor-card">
+
+                    <!-- Header: Avatar + Name + Company -->
+                    <div class="d-flex align-items-start justify-content-between mb-3">
+                        <div class="d-flex align-items-center flex-grow-1">
+                            <div class="rounded-circle me-3 d-flex align-items-center 
+                                        justify-content-center avatar-initial"
+                                 style="width:50px; height:50px; 
+                                        background-color: var(--reboot-primary); 
+                                        flex-shrink: 0;">
+                                {{ mentor.name|first|upper }}
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">{{ mentor.name }}</h6>
+                                {% if mentor.mentorprofile.company %}
+                                    <small class="text-muted">
+                                        {{ mentor.mentorprofile.company|title }}
+                                    </small>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Availability Badge -->
+                        {% if mentor.mentorprofile.availability %}
+                            <span class="availability-badge badge-available">
+                                🟢 Online
+                            </span>
+                        {% else %}
+                            <span class="availability-badge badge-unavailable">
+                                ⚫ Offline
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Years of Experience -->
+                    {% if mentor.mentorprofile.years_of_experience %}
+                        <div class="mb-3">
+                            <small class="text-muted d-block mb-1">
+                                Experience
+                            </small>
+                            <span class="fw-semibold">
+                                {{ mentor.mentorprofile.years_of_experience }}
+                                {% if mentor.mentorprofile.years_of_experience == 1 %}
+                                    year
+                                {% else %}
+                                    years
+                                {% endif %}
+                            </span>
+                        </div>
+                    {% endif %}
+
+                    <!-- Availability Times -->
+                    {% if mentor.mentorprofile.availability_times %}
+                        <div class="mb-3">
+                            <small class="text-muted d-block mb-1">
+                                🕐 Available
+                            </small>
+                            <small class="text-secondary">
+                                {{ mentor.mentorprofile.availability_times }}
+                            </small>
+                        </div>
+                    {% endif %}
+                    <!-- View Profile Button -->
+                    <div class="mt-auto pt-3 border-top">
+                        <a href="{% url 'mentorship:mentor_profile' mentor.pk %}" 
+                            class="btn btn-sm btn-reboot w-100">
+                                View Full Profile
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p class="text-muted text-center py-5">
+                    No mentors have joined yet. Check back soon.
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

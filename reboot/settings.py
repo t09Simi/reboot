@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "core",
     "accounts.apps.AccountsConfig",
     "concepts.apps.ConceptsConfig",
+    "mentorship.apps.MentorshipConfig",
 ]
 
 MIDDLEWARE = [

@@ -120,3 +120,54 @@ a:hover {
     border-color: var(--reboot-accent);
     color: var(--reboot-text);
 }
+
+Here's both files:
+
+Add to main.css
+css/* Mentor Cards */
+.mentor-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.mentor-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+}
+.avatar-initial {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: white;
+}
+.skills-truncated {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.875rem;
+}
+.availability-badge {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+.badge-available {
+    background-color: #d4edda;
+    color: #155724;
+}
+.badge-unavailable {
+    background-color: #e2e3e5;
+    color: #383d41;
+}
+
+/* Reboot Button */
+.btn-reboot {
+    border: 2px solid var(--reboot-primary);
+    color: var(--reboot-primary);
+    background: transparent;
+    border-radius: 8px;
+}
+.btn-reboot:hover {
+    background-color: var(--reboot-primary);
+    color: white;
+}

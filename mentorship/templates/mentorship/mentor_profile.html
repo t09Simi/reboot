@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% block title %}{{ mentor.name }} - Mentor Profile — Reboot{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Back link -->
+        <div class="col-12 mb-4">
+            <a href="{% url 'mentorship:mentor_list' %}" class="text-decoration-none">
+                ← Back to Mentors
+            </a>
+        </div>
+
+        <!-- Main Profile Card -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm p-5">
+                <!-- Header Section -->
+                <div class="d-flex align-items-start mb-5 pb-4 border-bottom">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-4"
+                         style="width: 80px; height: 80px; background-color: var(--reboot-primary); font-size: 2rem; 
+                                font-weight: bold; color: white; flex-shrink: 0;">
+                        {{ mentor.name|first|upper }}
+                    </div>
+                    <div class="flex-grow-1">
+                        <h2 class="fw-bold mb-1">{{ mentor.name }}</h2>
+                        {% if mentor.mentorprofile.company %}
+                            <p class="text-muted mb-2">
+                                <i class="bi bi-building me-2"></i>{{ mentor.mentorprofile.company|title }}
+                            </p>
+                        {% endif %}
+                        <!-- Availability Badge -->
+                        <div>
+                            {% if mentor.mentorprofile.availability %}
+                                <span class="availability-badge badge-available">🟢 Online</span>
+                            {% else %}
+                                <span class="availability-badge badge-unavailable">⚫ Offline</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience Section -->
+                {% if mentor.mentorprofile.years_of_experience %}
+                    <div class="mb-5">
+                        <h5 class="fw-bold mb-3">Experience</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="me-4">
+                                <h3 class="fw-bold style="color: var(--reboot-primary); mb-0">{{ mentor.mentorprofile.years_of_experience }}</h3>
+                                <small class="text-muted">
+                                    {% if mentor.mentorprofile.years_of_experience == 1 %}
+                                        year
+                                    {% else %}
+                                        years
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="text-muted">of professional experience</div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Education Section -->
+                {% if mentor.mentorprofile.education %}
+                    <div class="mb-5">
+                        <h5 class="fw-bold mb-3">Education</h5>
+                        <p class="mb-0">{{ mentor.mentorprofile.education }}</p>
+                    </div>
+                {% endif %}
+
+                <!-- Skills Section -->
+                {% if mentor.mentorprofile.skills %}
+                    <div class="mb-5">
+                        <h5 class="fw-bold mb-3">Skills</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <p class="text-secondary">{{ mentor.mentorprofile.skills }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Interests Section -->
+                {% if mentor.mentorprofile.interests %}
+                    <div class="mb-5">
+                        <h5 class="fw-bold mb-3">Interests</h5>
+                        <p class="mb-0">{{ mentor.mentorprofile.interests }}</p>
+                    </div>
+                {% endif %}
+
+                <!-- Availability Times Section -->
+                {% if mentor.mentorprofile.availability_times %}
+                    <div class="mb-5">
+                        <h5 class="fw-bold mb-3">Available Times</h5>
+                        <p class="mb-0 text-muted">
+                            <i class="bi bi-calendar-check me-2"></i>{{ mentor.mentorprofile.availability_times }}
+                        </p>
+                    </div>
+                {% endif %}
+
+                <!-- Portfolio Section -->
+                {% if mentor.mentorprofile.portfolio %}
+                    <div class="mb-5">
+                        <h5 class="fw-bold mb-3">Portfolio</h5>
+                        <a href="{{ mentor.mentorprofile.portfolio }}" target="_blank" class="btn btn-dark btn-sm">
+                            View Portfolio <i class="bi bi-box-arrow-up-right ms-2"></i>
+                        </a>
+                    </div>
+                {% endif %}
+
+                <!-- Contact Section -->
+                <div class="mb-4 p-4 bg-light rounded">
+                    <h5 class="fw-bold mb-3">Contact</h5>
+                    <div class="row">
+                        {% if mentor.email %}
+                            <div class="col-md-6 mb-2">
+                                <small class="text-muted d-block">Email</small>
+                                <a href="mailto:{{ mentor.email }}" class="text-decoration-none">
+                                    {{ mentor.email }}
+                                </a>
+                            </div>
+                        {% endif %}
+                        {% if mentor.phone %}
+                            <div class="col-md-6 mb-2">
+                                <small class="text-muted d-block">Phone</small>
+                                <a href="tel:{{ mentor.phone }}" class="text-decoration-none">
+                                    {{ mentor.phone }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Send Request Section -->
+            <div class="mt-4">
+                {% if can_send_request %}
+                    <button class="btn btn-dark btn-lg w-100" data-bs-toggle="modal" data-bs-target="#requestModal">
+                        Send Mentorship Request
+                    </button>
+                {% elif existing_request %}
+                    <div class="alert alert-info" role="alert">
+                        <i class="bi bi-info-circle me-2"></i>
+                        You already have a <strong>{{ existing_request.status }}</strong> mentorship request with this mentor.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm p-4">
+                <h5 class="fw-bold mb-3">Quick Info</h5>
+                <ul class="list-unstyled">
+                    {% if mentor.mentorprofile.availability %}
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            <strong>Accepting requests</strong>
+                        </li>
+                    {% else %}
+                        <li class="mb-2">
+                            <i class="bi bi-x-circle text-secondary me-2"></i>
+                            <strong>Not accepting requests</strong>
+                        </li>
+                    {% endif %}
+                    {% if mentor.mentorprofile.years_of_experience %}
+                        <li class="mb-2">
+                            <i class="bi bi-briefcase me-2"></i>
+                            <strong>{{ mentor.mentorprofile.years_of_experience }}+ years</strong> experience
+                        </li>
+                    {% endif %}
+                    {% if mentor.mentorprofile.company %}
+                        <li class="mb-2">
+                            <i class="bi bi-building me-2"></i>
+                            Works at <strong>{{ mentor.mentorprofile.company|title }}</strong>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Modal for Mentorship Request -->
+<div class="modal fade" id="requestModal" tabindex="-1" aria-labelledby="requestModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="requestModalLabel">Send Mentorship Request</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{% url 'mentorship:send_request' mentor.pk %}>
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Why do you want to connect with {{ mentor.name }}?</label>
+                        <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell them about your goals and what you're looking to learn..." required></textarea>
+                        <small class="form-text text-muted">Be clear and genuine — this helps mentors decide to accept your request.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-dark">Send Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
