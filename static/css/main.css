@@ -121,10 +121,7 @@ a:hover {
     color: var(--reboot-text);
 }
 
-Here's both files:
-
-Add to main.css
-css/* Mentor Cards */
+/* Mentor Cards */
 .mentor-card {
     transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -136,13 +133,6 @@ css/* Mentor Cards */
     font-size: 1.25rem;
     font-weight: bold;
     color: white;
-}
-.skills-truncated {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    font-size: 0.875rem;
 }
 .availability-badge {
     display: inline-block;
