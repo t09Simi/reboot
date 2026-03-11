@@ -43,3 +43,24 @@ def send_request(request, pk):
         return redirect('mentorship:mentor_profile', pk=pk)
     
     return redirect('mentorship:mentor_profile', pk=pk)
+
+@login_required
+def respond_request(request, pk):
+    instance = get_object_or_404(MentorshipRequest, pk=pk)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        
+        if action == 'accept':
+            instance.status = 'accepted'
+            instance.save()
+            messages.success(request, f"You accepted {instance.sender.name}'s request! ")    
+        
+        elif action == 'decline':
+            instance.status = 'declined'
+            instance.save()
+            messages.success(request, f"You declined {instance.sender.name}'s request! ")
+
+        return redirect('core:dashboard')
+
+
