@@ -47,17 +47,20 @@ Most platforms assume you already have experience, a degree, or a network. Reboo
 - [x] Role based registration and login
 - [x] Automatic profile creation via Django signals
 - [x] Career Gaper profile with completion tracking and progress bar
-- [x] Mentor discovery feed showing career gapers with their gap stories
+- [x] Mentor dashboard — incoming requests with Accept / Decline actions
+- [x] Mentorship request system — career gapers send requests with a     message
+- [x]Notifications for both sides — mentor notified on new request, career gaper notified on response
 - [x] Job roles explorer organised by IT domain
 
 ## Coming Soon
 
+- [ ] Session scheduling between mentor and career gaper
+- [ ] Testimonials — submission, mentor approval, admin publish
 - [ ] AI Career Buddy — personalised guidance via Claude API
 - [ ] Community forums
-- [ ] Mentorship booking and scheduling system
-- [ ] Requests and inbox for mentors
 - [ ] Industry news feed
 - [ ] REST API with Django REST Framework
+- [ ] React frontend
 - [ ] Docker deployment
 - [ ] CI/CD pipeline
 
