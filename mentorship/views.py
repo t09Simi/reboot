@@ -28,6 +28,22 @@ def mentor_profile(request, pk):
     })
 
 @login_required
+def career_gaper_profile(request, pk):
+    career_gaper = get_object_or_404(User, pk=pk, role='career_gaper')
+
+    instance_requested = MentorshipRequest.objects.filter(
+        sender = career_gaper,
+        receiver = request.user,
+        status = 'pending'
+    ).first()
+
+    return render(request, 'mentorship/career_gaper_profile.html', {
+        'career_gaper': career_gaper,
+        'profile': career_gaper.careergapprofile,
+        'instance_requested': instance_requested
+    })
+
+@login_required
 def send_request(request, pk):
     mentor = get_object_or_404(User, pk=pk, role='mentor')
     

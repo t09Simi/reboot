@@ -242,6 +242,12 @@
                             ✗ Decline
                         </button>
                     </form>
+
+                    <!-- View Full Profile -->
+                    <a href="{% url 'mentorship:career_gaper_profile' req.sender.pk %}" 
+                    class="btn btn-sm btn-reboot px-3">
+                        View Profile
+                    </a>
                 </div>
 
             </div>

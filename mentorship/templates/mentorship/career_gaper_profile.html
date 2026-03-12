@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ profile.user.name }} — Career Gapper Profile — Reboot{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="mb-4">
+    <a href="{% url 'core:dashboard' %}" 
+       class="text-decoration-none text-muted">
+        ← Back to Dashboard
+    </a>
+    </div>
+
+    <!-- Profile Header -->
+    <div class="card border-0 shadow-sm p-5 mb-4" style="border-left: 4px solid #212529 !important;">
+        <div class="row align-items-center g-4">
+            <div class="col-md-2 text-center">
+                {% if profile.profile_picture %}
+                    <img src="{{ profile.profile_picture.url }}" 
+                         alt="{{ profile.user.name }}"
+                         class="rounded-circle"
+                         style="width: 120px; height: 120px; object-fit: cover;">
+                {% else %}
+                    <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center"
+                         style="width: 120px; height: 120px; background-color: var(--reboot-primary-light);">
+                        <span style="color: var(--reboot-primary); font-weight: bold; font-size: 48px;">
+                            {{ profile.user.name|first|upper }}
+                        </span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-10">
+                <h1 class="fw-bold mb-2">{{ profile.user.name }}</h1>
+                <div class="mb-3">
+                    <span class="badge bg-dark px-3 py-2 rounded-pill">
+                        {{ profile.get_employment_status_display|title }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-md-8">
+            <!-- Career & Education Section -->
+            <div class="card border-0 shadow-sm p-4 mb-4">
+                <h5 class="fw-bold mb-3">🎓 Education & Career</h5>
+                <div class="mb-3">
+                    <strong class="d-block mb-1">Education</strong>
+                    <p class="text-muted">{{ profile.education|default:"Not specified" }}</p>
+                </div>
+                <hr>
+                <div>
+                    <strong class="d-block mb-1">Employment Status</strong>
+                    <p class="text-muted">{{ profile.get_employment_status_display|title }}</p>
+                </div>
+            </div>
+
+            <!-- Career Gap Section -->
+            <div class="card border-0 shadow-sm p-4 mb-4">
+                <h5 class="fw-bold mb-3">📍 Career Gap</h5>
+                
+                {% if profile.gap_story %}
+                    <div class="mb-3">
+                        <strong class="d-block mb-1">Story</strong>
+                        <p class="text-muted" style="white-space: pre-wrap;">{{ profile.gap_story }}</p>
+                    </div>
+                    <hr>
+                {% endif %}
+
+                <div>
+                    <strong class="d-block mb-1">Gap Duration</strong>
+                    {% if profile.gap_duration %}
+                        <p class="text-muted">{{ profile.gap_duration }} month{{ profile.gap_duration|pluralize }}</p>
+                    {% else %}
+                        <p class="text-muted">Not specified</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Experience & Skills Section -->
+            <div class="card border-0 shadow-sm p-4 mb-4">
+                <h5 class="fw-bold mb-3">💼 Experience & Skills</h5>
+
+                {% if profile.prior_experience %}
+                    <div class="mb-3">
+                        <strong class="d-block mb-1">Prior Experience</strong>
+                        <p class="text-muted" style="white-space: pre-wrap;">{{ profile.prior_experience }}</p>
+                    </div>
+                    <hr>
+                {% endif %}
+
+                {% if profile.certifications %}
+                    <div class="mb-3">
+                        <strong class="d-block mb-1">Certifications</strong>
+                        <p class="text-muted" style="white-space: pre-wrap;">{{ profile.certifications }}</p>
+                    </div>
+                    <hr>
+                {% endif %}
+
+                <div>
+                    <strong class="d-block mb-1">Interests</strong>
+                    <p class="text-muted">{{ profile.interests|default:"Not specified" }}</p>
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            {% if profile.projects %}
+                <div class="card border-0 shadow-sm p-4 mb-4">
+                    <h5 class="fw-bold mb-3">🚀 Projects</h5>
+                    <p class="text-muted" style="white-space: pre-wrap;">{{ profile.projects }}</p>
+                </div>
+            {% endif %}
+
+            <!-- Portfolio Section -->
+            {% if profile.portfolio %}
+                <div class="card border-0 shadow-sm p-4 mb-4">
+                    <h5 class="fw-bold mb-3">📁 Portfolio</h5>
+                    <a href="{{ profile.portfolio }}" target="_blank" class="btn btn-outline-dark btn-sm">
+                        View Portfolio →
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Column - Action Sidebar -->
+        <div class="col-md-4">
+            {% if instance_requested %}
+            <div class="card border-0 shadow-sm p-4 mb-4">
+            <h6 class="fw-bold mb-3">📨 Pending Request</h6>
+            
+            <div class="alert alert-info small mb-3">
+                <strong>Their message:</strong><br>
+                {{ instance_requested.message }}
+            </div>
+            
+            <p class="text-muted small mb-3">
+                Sent {{ instance_requested.created_at|timesince }} ago
+            </p>
+
+            <!-- Accept / Decline -->
+            <div class="d-flex gap-2">
+                    <form method="POST" 
+                        action="{% url 'mentorship:respond_request' instance_requested.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="accept">
+                        <button type="submit" class="btn btn-dark btn-sm px-3">
+                            ✓ Accept
+                        </button>
+                    </form>
+                    <form method="POST" 
+                        action="{% url 'mentorship:respond_request' instance_requested.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="decline">
+                        <button type="submit" class="btn btn-sm btn-outline-secondary px-3">
+                            ✗ Decline
+                        </button>
+                    </form>
+            </div>
+        </div>
+        {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}
