@@ -49,7 +49,7 @@ Most platforms assume you already have experience, a degree, or a network. Reboo
 - [x] Career Gaper profile with completion tracking and progress bar
 - [x] Mentor dashboard — incoming requests with Accept / Decline actions
 - [x] Mentorship request system — career gapers send requests with a     message
-- [x]Notifications for both sides — mentor notified on new request, career gaper notified on response
+- [x] Notifications for both sides — mentor notified on new request, career gaper notified on response
 - [x] Job roles explorer organised by IT domain
 
 ## Coming Soon
