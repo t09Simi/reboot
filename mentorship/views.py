@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 
 from accounts.models import User
 from .models import MentorshipRequest
+from notifications.models import Notification
 
 @login_required
 def mentor_list(request):
@@ -39,6 +40,14 @@ def send_request(request, pk):
             message=message,
             status='pending'
         )
+        
+        # Notify the mentor
+        Notification.objects.create(
+            recipient=mentor,
+            message=f"{request.user.name} sent you a mentorship request!",
+            link="/dashboard/"
+        )
+        
         messages.success(request, f"🎉 Your request has been sent to {mentor.name}!")
         return redirect('mentorship:mentor_profile', pk=pk)
     
@@ -54,13 +63,24 @@ def respond_request(request, pk):
         if action == 'accept':
             instance.status = 'accepted'
             instance.save()
+
+            Notification.objects.create(
+                recipient = instance.sender,
+                message = f"{instance.receiver.name} accepted your mentorship request! 🎉",
+                link = "/dashboard/"
+            )
             messages.success(request, f"You accepted {instance.sender.name}'s request! ")    
         
         elif action == 'decline':
             instance.status = 'declined'
             instance.save()
-            messages.success(request, f"You declined {instance.sender.name}'s request! ")
 
+            Notification.objects.create(
+                recipient = instance.sender,
+                message = f"{instance.receiver.name} declined your mentorship request.",
+                link = "/dashboard/"
+            )
+            messages.success(request, f"You declined {instance.sender.name}'s request! ")
         return redirect('core:dashboard')
 
 

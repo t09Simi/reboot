@@ -106,6 +106,65 @@
                     </ul>
                 </li>
 
+                <!-- Notification Bell -->
+                <li class="nav-item dropdown me-2">
+                <a class="nav-link position-relative d-flex align-items-center" 
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown">
+                    <!-- Bell icon using Bootstrap Icons -->
+                    <svg xmlns="http://www.w3.org/2000/svg" 
+                        width="20" height="20" fill="white" 
+                        viewBox="0 0 16 16">
+                        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
+                    </svg>
+                    {% if unread_count > 0 %}
+                        <span class="position-absolute d-flex align-items-center 
+                                    justify-content-center"
+                            style="top: 2px; right: 0px;
+                                    width: 16px; height: 16px;
+                                    background-color: #ff4757;
+                                    border-radius: 50%;
+                                    font-size: 0.6rem;
+                                    font-weight: bold;
+                                    color: white;">
+                            {{ unread_count }}
+                        </span>
+                    {% endif %}
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end"
+                    style="min-width: 300px; max-height: 400px; overflow-y: auto;">
+                    {% if unread_notifications %}
+                        {% for notification in unread_notifications %}
+                            <li>
+                                <a class="dropdown-item py-3 border-bottom"
+                                href="{% url 'notifications:mark_read' notification.pk %}">
+                                    <div class="small fw-semibold">
+                                        {{ notification.message }}
+                                    </div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">
+                                        {{ notification.created_at|timesince }} ago
+                                    </div>
+                                </a>
+                            </li>
+                        {% endfor %}
+                        <li>
+                            <a class="dropdown-item text-center small text-muted py-2"
+                            href="{% url 'notifications:mark_all_read' %}">
+                                Mark all as read
+                            </a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <span class="dropdown-item text-muted small py-3 text-center">
+                                No new notifications
+                            </span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </li>
+
             {% else %}
                 <!-- Logged out Nav -->
                 <li class="nav-item">
