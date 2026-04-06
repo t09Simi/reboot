@@ -381,6 +381,19 @@
                     {% endif %}
                 </div>
 
+                    <!-- Mark Complete Button -->
+
+                    {% if mentorship.status == 'session_booked' %}
+                        <form method="POST"
+                            action="{% url 'mentorship:complete_session' mentorship.sessions.first.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-dark px-3">
+                                ✓ Mark Complete
+                            </button>
+                        </form>
+                    {% endif %}
+                
+
                 <!-- Action Buttons -->
                 <div class="d-flex gap-2 mt-auto">
                     <a href="{% url 'mentorship:career_gaper_profile' mentorship.sender.pk %}"

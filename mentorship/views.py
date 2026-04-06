@@ -133,3 +133,21 @@ def schedule_session(request, pk):
         'form': form,
         'instance': instance
     })
+
+@login_required
+def complete_session(request, pk):
+    instance = get_object_or_404(Session, pk=pk)
+
+    if request.method == 'POST':
+        instance.status = 'completed'
+        instance.save()
+
+        instance.request.status = 'completed'
+        instance.request.save()
+
+        Notification.objects.create(
+                recipient=instance.career_gaper,
+                message=f"{request.user.name} marked your session as completed! 🎉",
+                link="/dashboard/"
+            )
+    return redirect('core:dashboard')
