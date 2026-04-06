@@ -84,68 +84,143 @@
     </div>
 </div>
 
-<div class="row mt-4 mb-2">
-    <div class="col-12">
-        <h5 class="fw-bold">Your Mentorship Requests</h5>
-    </div>
-</div>
-<div class="row g-4">
-    {% for req in my_requests %}
-        <div class="col-md-6">
-            <div class="card border-0 shadow-sm p-4 h-100">
-
-                <!-- Receiver Info - Mentor Name -->
-                <div class="d-flex align-items-center mb-3">
-                    <div class="rounded-circle me-3 d-flex align-items-center
-                                justify-content-center"
-                         style="width:50px; height:50px;
-                                background-color: var(--reboot-primary-light);">
-                        <span style="color:var(--reboot-primary); font-weight:bold;">
-                            {{ req.receiver.name|first|upper }}
-                        </span>
-                    </div>
-                    <div>
-                        <h6 class="fw-bold mb-0">{{ req.receiver.name }}</h6>
-                        <small class="text-muted">
-                            Mentor
-                        </small>
-                    </div>
-                </div>
-
-                <!-- Request Status with Color Coding -->
-                <div class="mb-3">
-                    {% if req.status == 'pending' %}
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
-                            ⏳ Pending
-                        </span>
-                    {% elif req.status == 'accepted' %}
-                        <span class="badge bg-success px-3 py-2 rounded-pill">
-                            ✓ Accepted
-                        </span>
-                    {% elif req.status == 'declined' %}
-                        <span class="badge bg-danger px-3 py-2 rounded-pill">
-                            ✗ Declined
-                        </span>
-                    {% endif %}
-                </div>
-
-                <!-- Message Sent Time -->
-                <small class="text-muted mb-3 d-block">
-                    Message sent {{ req.created_at|timesince }} ago
-                </small>
-
-            </div>
+<div class="row mt-4 g-4">
+    <div class="col-lg-7">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">Your Mentorship Requests</h5>
         </div>
-    {% empty %}
-        <div class="col-12">
+
+        <div class="row g-4">
+            {% for req in my_requests %}
+                <div class="col-md-12">
+                    <div class="card border-0 shadow-sm p-4 h-100">
+
+                        <!-- Receiver Info - Mentor Name -->
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle me-3 d-flex align-items-center
+                                        justify-content-center"
+                                 style="width:50px; height:50px;
+                                        background-color: var(--reboot-primary-light);">
+                                <span style="color:var(--reboot-primary); font-weight:bold;">
+                                    {{ req.receiver.name|first|upper }}
+                                </span>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0">{{ req.receiver.name }}</h6>
+                                <small class="text-muted">
+                                    Mentor
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Request Status with Color Coding -->
+                        <div class="mb-3">
+                            {% if req.status == 'pending' %}
+                                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
+                                    ⏳ Pending
+                                </span>
+                            {% elif req.status == 'accepted' %}
+                                <span class="badge bg-success px-3 py-2 rounded-pill">
+                                    ✓ Accepted
+                                </span>
+                            {% elif req.status == 'declined' %}
+                                <span class="badge bg-danger px-3 py-2 rounded-pill">
+                                    ✗ Declined
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Message Sent Time -->
+                        <small class="text-muted mb-3 d-block">
+                            Message sent {{ req.created_at|timesince }} ago
+                        </small>
+
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm p-4 text-center">
+                        <p class="text-muted mb-0">
+                            No mentor requests yet. 
+                            <a href="{% url 'mentorship:mentor_list' %}">Browse mentors</a> to get started.
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">Upcoming Sessions</h5>
+        </div>
+
+        {% if my_sessions %}
+            <div class="row g-4">
+                {% for session in my_sessions %}
+                    <div class="col-12">
+                        <div class="card border-0 shadow-sm p-4 h-100">
+
+                            <!-- Mentor Info -->
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle me-3 d-flex align-items-center
+                                            justify-content-center"
+                                     style="width:50px; height:50px;
+                                            background-color: var(--reboot-primary-light);">
+                                    <span style="color:var(--reboot-primary); font-weight:bold;">
+                                        {{ session.mentor.name|first|upper }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-0">{{ session.mentor.name }}</h6>
+                                    <small class="text-muted">Mentor</small>
+                                </div>
+                            </div>
+
+                            <!-- Session Details -->
+                            <div class="mb-2">
+                                <small class="text-muted d-block">📅 Date & Time</small>
+                                <span class="fw-semibold">
+                                    {{ session.scheduled_at|date:"D, d M Y" }} 
+                                    at {{ session.scheduled_at|time:"H:i" }}
+                                </span>
+                            </div>
+
+                            <div class="mb-2">
+                                <small class="text-muted d-block">⏱ Duration</small>
+                                <span class="fw-semibold">{{ session.duration }} minutes</span>
+                            </div>
+
+                            {% if session.meeting_link %}
+                                <div class="mb-3">
+                                    <small class="text-muted d-block">🔗 Meeting Link</small>
+                                    <a href="{{ session.meeting_link }}" 
+                                       target="_blank"
+                                       class="btn btn-sm btn-dark mt-1">
+                                        Join Session
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                            <div class="mt-auto">
+                                <span class="badge bg-success px-3 py-2 rounded-pill">
+                                    📅 Scheduled
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
             <div class="card border-0 shadow-sm p-4 text-center">
                 <p class="text-muted mb-0">
-                    No mentor requests yet. 
-                    <a href="{% url 'mentorship:mentor_list' %}">Browse mentors</a> to get started.
+                    No upcoming sessions yet. 
+                    <a href="{% url 'mentorship:mentor_list' %}">Find a mentor</a> to book your first session.
                 </p>
             </div>
-        </div>
-    {% endfor %}
+        {% endif %}
+    </div>
 </div>
 
 <div class="row mt-4 g-4">
@@ -258,6 +333,75 @@
                 <p class="text-muted mb-0">
                     No pending requests right now. 
                     Check back soon.
+                </p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<!-- Active Mentorships -->
+<div class="row mt-4 mb-2">
+    <div class="col-12">
+        <h5 class="fw-bold">Active Mentorships</h5>
+    </div>
+</div>
+
+<div class="row g-4">
+    {% for mentorship in active_mentorships %}
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm p-4 h-100">
+
+                <!-- Sender Info -->
+                <div class="d-flex align-items-center mb-3">
+                    <div class="rounded-circle me-3 d-flex align-items-center
+                                justify-content-center"
+                         style="width:50px; height:50px;
+                                background-color: var(--reboot-primary-light);">
+                        <span style="color:var(--reboot-primary); font-weight:bold;">
+                            {{ mentorship.sender.name|first|upper }}
+                        </span>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-0">{{ mentorship.sender.name }}</h6>
+                        <small class="text-muted">
+                            {{ mentorship.sender.careergapprofile.employment_status|title }}
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Status Badge -->
+                <div class="mb-3">
+                    {% if mentorship.status == 'accepted' %}
+                        <span class="badge bg-success px-3 py-2 rounded-pill">
+                            ✓ Accepted
+                        </span>
+                    {% elif mentorship.status == 'session_booked' %}
+                        <span class="badge bg-dark px-3 py-2 rounded-pill">
+                            📅 Session Booked
+                        </span>
+                    {% endif %}
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex gap-2 mt-auto">
+                    <a href="{% url 'mentorship:career_gaper_profile' mentorship.sender.pk %}"
+                       class="btn btn-sm btn-reboot px-3">
+                        View Profile
+                    </a>
+                    {% if mentorship.status == 'accepted' %}
+                        <a href="{% url 'mentorship:schedule_session' mentorship.pk %}"
+                           class="btn btn-sm btn-dark px-3">
+                            📅 Schedule Session
+                        </a>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="card border-0 shadow-sm p-4 text-center">
+                <p class="text-muted mb-0">
+                    No active mentorships yet.
                 </p>
             </div>
         </div>

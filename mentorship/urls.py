@@ -9,4 +9,5 @@ urlpatterns = [
     path('mentors/<int:pk>/request/', views.send_request, name='send_request'),
     path('requests/<int:pk>/respond/', views.respond_request, name='respond_request'),
     path('profile/<int:pk>/', views.career_gaper_profile, name='career_gaper_profile'),
+    path('session/<int:pk>', views.schedule_session, name='schedule_session')
 ]

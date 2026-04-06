@@ -126,42 +126,59 @@
             {% endif %}
         </div>
 
-        <!-- Right Column - Action Sidebar -->
         <div class="col-md-4">
             {% if instance_requested %}
-            <div class="card border-0 shadow-sm p-4 mb-4">
-            <h6 class="fw-bold mb-3">📨 Pending Request</h6>
-            
-            <div class="alert alert-info small mb-3">
-                <strong>Their message:</strong><br>
-                {{ instance_requested.message }}
-            </div>
-            
-            <p class="text-muted small mb-3">
-                Sent {{ instance_requested.created_at|timesince }} ago
-            </p>
+                <div class="card border-0 shadow-sm p-4 mb-4">
 
-            <!-- Accept / Decline -->
-            <div class="d-flex gap-2">
-                    <form method="POST" 
-                        action="{% url 'mentorship:respond_request' instance_requested.pk %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="action" value="accept">
-                        <button type="submit" class="btn btn-dark btn-sm px-3">
-                            ✓ Accept
-                        </button>
-                    </form>
-                    <form method="POST" 
-                        action="{% url 'mentorship:respond_request' instance_requested.pk %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="action" value="decline">
-                        <button type="submit" class="btn btn-sm btn-outline-secondary px-3">
-                            ✗ Decline
-                        </button>
-                    </form>
-            </div>
+                    {% if instance_requested.status == 'pending' %}
+                        <h6 class="fw-bold mb-3">📨 Pending Request</h6>
+
+                        <div class="alert alert-info small mb-3">
+                            <strong>Their message:</strong><br>
+                            {{ instance_requested.message }}
+                        </div>
+
+                        <p class="text-muted small mb-3">
+                            Sent {{ instance_requested.created_at|timesince }} ago
+                        </p>
+
+                        <div class="d-flex gap-2">
+                            <form method="POST"
+                                action="{% url 'mentorship:respond_request' instance_requested.pk %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="accept">
+                                <button type="submit" class="btn btn-dark btn-sm px-3">
+                                    ✓ Accept
+                                </button>
+                            </form>
+                            <form method="POST"
+                                action="{% url 'mentorship:respond_request' instance_requested.pk %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="decline">
+                                <button type="submit" class="btn btn-sm btn-outline-secondary px-3">
+                                    ✗ Decline
+                                </button>
+                            </form>
+                        </div>
+
+                    {% elif instance_requested.status == 'accepted' %}
+                        <div class="alert alert-success small mb-3">
+                            ✓ You accepted this request
+                        </div>
+                        <a href="{% url 'mentorship:schedule_session' instance_requested.pk %}"
+                        class="btn btn-dark w-100">
+                            📅 Schedule Session
+                        </a>
+
+                    {% elif instance_requested.status == 'session_booked' %}
+                        <div class="alert alert-info small mb-0">
+                            📅 Session already scheduled
+                        </div>
+                    {% endif %}
+
+                </div>
+            {% endif %}
         </div>
-        {% endif %}
 
         </div>
     </div>

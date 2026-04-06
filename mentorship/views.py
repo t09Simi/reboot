@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.shortcuts import redirect
 
 from accounts.models import User
-from .models import MentorshipRequest
+from .models import MentorshipRequest, Session
+from .forms import SessionForm
 from notifications.models import Notification
 
 @login_required
@@ -33,8 +34,7 @@ def career_gaper_profile(request, pk):
 
     instance_requested = MentorshipRequest.objects.filter(
         sender = career_gaper,
-        receiver = request.user,
-        status = 'pending'
+        receiver = request.user
     ).first()
 
     return render(request, 'mentorship/career_gaper_profile.html', {
@@ -99,4 +99,37 @@ def respond_request(request, pk):
             messages.success(request, f"You declined {instance.sender.name}'s request! ")
         return redirect('core:dashboard')
 
+#Session booking
 
+@login_required
+def schedule_session(request, pk):
+    instance = get_object_or_404(MentorshipRequest, pk=pk)
+
+    if request.method == 'POST':
+        form = SessionForm(request.POST)
+        if form.is_valid():
+            session = form.save(commit=False)
+            session.mentor = request.user
+            session.career_gaper = instance.sender
+            session.request = instance
+            session.save()
+
+            # Update request status
+            instance.status = 'session_booked'
+            instance.save()
+
+            # Notify career gaper
+            Notification.objects.create(
+                recipient=instance.sender,
+                message=f"{request.user.name} scheduled a session with you! 📅",
+                link="/dashboard/"
+            )
+        messages.success(request,f"Session booked with {instance.sender.name}!")
+        return redirect('core:dashboard')
+    else:
+        form = SessionForm()
+
+    return render(request, 'mentorship/schedule_session.html', {
+        'form': form,
+        'instance': instance
+    })
