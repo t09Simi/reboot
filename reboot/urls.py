@@ -28,4 +28,5 @@ urlpatterns = [
     path('roles/', include('concepts.urls')),
     path('mentorship/', include('mentorship.urls')),
     path('notifications/', include('notifications.urls')),
+    path('api/', include('api.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
