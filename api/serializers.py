@@ -95,5 +95,13 @@ class MentorProfileSerializer(serializers.ModelSerializer):
             'availability' : {'required': False},
             'availability_times' : {'required': False},
         }
-            
+
+class MentorListSerializer(serializers.ModelSerializer):
+    mentorprofile = MentorProfileSerializer(read_only = True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'name', 'mentorprofile']
+
+
         

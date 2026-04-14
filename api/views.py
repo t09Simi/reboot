@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from django.shortcuts import get_object_or_404
-from accounts.models import CareerGapProfile, MentorProfile
-from .serializers import RegisterSerializer, CustomTokenObtainPairSerializer, CareerGaperProfileSerializer, MentorProfileSerializer
+from accounts.models import CareerGapProfile, MentorProfile, User
+from .serializers import RegisterSerializer, CustomTokenObtainPairSerializer, CareerGaperProfileSerializer, MentorProfileSerializer, MentorListSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -64,3 +64,18 @@ class MentorProfileView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class MentorListView(APIView):
+    def get(self, request):
+        mentors = User.objects.filter(role='mentor').select_related('mentorprofile').order_by('-mentorprofile__availability')
+        serializer = MentorListSerializer(mentors, many=True)
+        return Response(serializer.data)
+    
+
+class MentorDetailView(APIView):
+    def get(self, request, pk):
+        mentor = get_object_or_404(User, pk=pk, role='mentor')
+        serializer = MentorListSerializer(mentor)
+        return Response(serializer.data)
+    
+
