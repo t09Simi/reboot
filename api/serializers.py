@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import authenticate
 from accounts.models import User, CareerGapProfile, MentorProfile
+from mentorship.models import MentorshipRequest
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     username_field = 'email'
@@ -103,5 +104,11 @@ class MentorListSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'name', 'mentorprofile']
 
+class MentorshipRequestSerializer(serializers.ModelSerializer):
+    sender_name = serializers.CharField(source='sender.name', read_only = True)
+    receiver_name = serializers.CharField(source='receiver.name', read_only = True)
+    class Meta:
+        model = MentorshipRequest
+        fields = ['id', 'sender_name', 'receiver_name', 'status', 'message', 'created_at']
 
         
