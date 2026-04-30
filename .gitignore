@@ -4,3 +4,6 @@ __pycache__/
 db.sqlite3
 .env
 media/
+frontend/node_modules/
+frontend/build/
+frontend/.env
