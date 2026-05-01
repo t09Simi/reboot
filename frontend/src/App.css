@@ -47,3 +47,64 @@
   font-weight: 600;
   text-decoration: none;
 }
+
+/* Register Page */
+
+.register-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.register-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 420px;
+}
+
+.register-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--reboot-text);
+    margin-bottom: 0.25rem;
+}
+
+.register-subtitle {
+    color: var(--reboot-muted);
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+}
+
+.register-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--reboot-muted);
+}
+
+.register-footer a {
+    color: var(--reboot-primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Style the select dropdown */
+.form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    background: white;
+    cursor: pointer;
+}
+
+.form-group select:focus {
+    border-color: var(--reboot-primary);
+}
