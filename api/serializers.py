@@ -24,9 +24,14 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         refresh = self.get_token(user)
 
+        refresh['role'] = user.role
+        refresh['name'] = user.name
+
         return {
             'refresh': str(refresh),
             'access': str(refresh.access_token),
+            'role':user.role,
+            'name': user.name,
         }
 
 class RegisterSerializer(serializers.ModelSerializer):

@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import '../App.css'
 
 export default function Login(){
@@ -10,6 +11,7 @@ export default function Login(){
     const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate()
+    const {setUser} = useAuth()
 
     async function handleSubmit(e) {
     e.preventDefault()
@@ -31,10 +33,19 @@ export default function Login(){
             if (response.ok) {
                 localStorage.setItem('access', data.access)
                 localStorage.setItem('refresh', data.refresh)
+                localStorage.setItem('role', data.role)
+                localStorage.setItem('name', data.name)
+
+                setUser({
+                    name: data.name,
+                    role: data.role})
+                    
                 navigate('/dashboard')
+
             } else {
                 setError('Invalid email or password')
             }
+            
         } catch (err) {
             console.log('Error:', err)
             setError('Something went wrong. Please try again.')
