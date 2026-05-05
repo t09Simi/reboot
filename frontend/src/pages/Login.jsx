@@ -11,7 +11,7 @@ export default function Login(){
     const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate()
-    const {setUser} = useAuth()
+    const { fetchUser } = useAuth()
 
     async function handleSubmit(e) {
     e.preventDefault()
@@ -35,11 +35,7 @@ export default function Login(){
                 localStorage.setItem('refresh', data.refresh)
                 localStorage.setItem('role', data.role)
                 localStorage.setItem('name', data.name)
-
-                setUser({
-                    name: data.name,
-                    role: data.role})
-                    
+                await fetchUser(data.access, data.role)
                 navigate('/dashboard')
 
             } else {

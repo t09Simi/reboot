@@ -55,6 +55,7 @@ class CareerGaperProfileSerializer(serializers.ModelSerializer):
     # feilds from User model
     name = serializers.CharField(source='user.name', read_only = True)
     email = serializers.CharField(source = 'user.email', read_only = True)
+    completion_percentage = serializers.SerializerMethodField()
 
     class Meta:
         model = CareerGapProfile
@@ -64,7 +65,8 @@ class CareerGaperProfileSerializer(serializers.ModelSerializer):
             'prior_experience', 'certifications',
             'projects', 'portfolio',
             'interests', 'gap_story',
-            'gap_duration', 'profile_picture'
+            'gap_duration', 'profile_picture',
+            'completion_percentage',
         ]
         extra_kwargs = {
             'employment_status': {'required': False},
@@ -78,6 +80,9 @@ class CareerGaperProfileSerializer(serializers.ModelSerializer):
             'gap_duration': {'required': False},
             'profile_picture': {'required': False},
         }
+
+    def get_completion_percentage(self, obj):
+            return obj.get_completion_percentage()
  
 class MentorProfileSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='user.name', read_only = True)
