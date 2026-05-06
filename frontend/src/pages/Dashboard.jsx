@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import clsx from "clsx"
@@ -40,10 +40,6 @@ export default function Dashboard() {
 }
 
 function CareerGaperDashboard({user}) { 
-
-    console.log("percentage", user.completion_percentage)
-    console.log("Employment", user.employment_status)
-    console.log("Education", user.education)
 
     let message = null
     if (user.completion_percentage === 0){
@@ -122,10 +118,90 @@ function CareerGaperDashboard({user}) {
 }
 
 function MentorDashboard({user}){
+
+    const [requests, setRequests] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(()=>{
+
+        async function fetchRequests(){
+            try{
+                const response = await fetch('http://127.0.0.1:8000/api/requests/received/',{
+                headers:{
+                        'Authorization': `Bearer ${localStorage.getItem('access')}`
+                    }
+            })
+                if(response.ok) {
+                const data = await response.json()
+                setRequests(data)
+                setLoading(false)
+                }
+                else{
+                    setLoading(false)
+                }
+            }
+            catch (error) {
+            console.error(error)
+            setLoading(false)
+            }
+    }
+
+    fetchRequests()   
+        
+    },[])
+
+    async function handleRequests(id, action){
+        try{
+            const response = await fetch(`http://127.0.0.1:8000/api/requests/${id}/respond/`,{
+            method : "POST",
+            headers:{
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem('access')}`
+                    },
+            body: JSON.stringify({action})
+
+        })
+            if (response.ok) {
+            setRequests(prev => prev.filter(req => req.id !== id))
+        }
+        }
+        catch(err){
+            console.error(err)
+        }
+    }
+
     return (
-        <div>
-            <h2>Welcome, {user.name} 👋</h2>
-            <p>You are a Mentor</p>
+        <div className='dashboard-container'>
+            <div>
+                <h2>Welcome, {user.name} 👋</h2>
+                <p>You have <strong>{requests.length} pending request {requests.length !== 1 ? "s" : ""}</strong>
+                    waiting for your response.
+                </p>
+            </div>
+        <div className='requests-grid'>
+                {requests.length > 0 ? (requests.map(req => (
+                    <div key={req.id} className='request-card'>
+                        <h6>{req.sender_name}</h6>
+                        <p>{req.message}</p>
+                        <small>{req.created_at}</small>
+                        <div className='request-actions'>
+                            <button className='btn-accept'
+                            onClick={() => handleRequests(req.id, "accept")}>
+                                ✓ Accept</button>
+                            <button className='btn-accept'
+                            onClick={() => handleRequests(req.id, "decline")}>
+                                ✗ Decline</button>
+                        </div>
+                    </div>
+                   
+                )))  : (<div className='empty-state'>
+                    <p>
+                    No pending requests right now. 
+                    Check back soon.
+                    </p>
+                    </div>)}
+            </div>
         </div>
+        
     )
 }
