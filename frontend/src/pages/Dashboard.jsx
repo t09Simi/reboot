@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import clsx from "clsx"
 import '../App.css'
+import TrendsWidget from '../components/TrendsWidget' 
 
 export default function Dashboard() {
 
@@ -13,7 +14,7 @@ export default function Dashboard() {
         if(!loading && !user){
             navigate('/login')
         }
-    },[user, loading])
+    },[user, loading, navigate])
 
     if (loading) return <div>Loading...</div>
     if (!user) return null
@@ -111,8 +112,11 @@ function CareerGaperDashboard({user}) {
                     </span>
                     <span className="percentage-label">complete</span>
                 </div>
+                
         </div>
+       
         </div>
+         <TrendsWidget /> 
         </div> 
     )
 }
