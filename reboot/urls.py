@@ -29,4 +29,5 @@ urlpatterns = [
     path('mentorship/', include('mentorship.urls')),
     path('notifications/', include('notifications.urls')),
     path('api/', include('api.urls')),
+    path('api/trends/', include('trends.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
