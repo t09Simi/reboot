@@ -27,4 +27,4 @@ EXPOSE 8000
 
 # Run migrations then start gunicorn. 1 worker + 2 threads is right-sized
 # for Render's free tier (512MB RAM).
-CMD ["sh", "-c", "python manage.py migrate --noinput && gunicorn reboot.wsgi:application --bind 0.0.0.0:8000 --workers 1 --threads 2"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && gunicorn reboot.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 1 --threads 2"]
