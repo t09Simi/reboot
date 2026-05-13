@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
+import { apiUrl } from '../api'
 
 const AuthContext = createContext()
 
@@ -24,8 +25,8 @@ export function AuthProvider({children}){
             
             const role = localStorage.getItem('role')
             const endpoint = role === 'mentor'
-            ? 'http://127.0.0.1:8000/api/mentor/profile/'
-            : 'http://127.0.0.1:8000/api/career-gaper/profile/'
+            ? apiUrl('/api/mentor/profile/')
+            : apiUrl('/api/career-gaper/profile/')
 
             const response = await fetch(endpoint, {
                 headers:{
