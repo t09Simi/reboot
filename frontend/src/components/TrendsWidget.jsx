@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react'
 import '../components/TrendsWidget.css'
+import { apiUrl } from '../api'
 import {
     BarChart,
     Bar,
@@ -35,7 +36,7 @@ export default function TrendsWidget(){
 
         async function fetchRequests(){
             try{
-                const response = await fetch('http://127.0.0.1:8000/api/trends/latest/',{
+                const response = await fetch(apiUrl('/api/trends/latest/'),{
                     headers:{
                         'Authorization': `Bearer ${localStorage.getItem('access')}`
                     }

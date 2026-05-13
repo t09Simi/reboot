@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import clsx from "clsx"
 import '../App.css'
+import { apiUrl } from '../api'
 import TrendsWidget from '../components/TrendsWidget' 
 
 export default function Dashboard() {
@@ -130,7 +131,7 @@ function MentorDashboard({user}){
 
         async function fetchRequests(){
             try{
-                const response = await fetch('http://127.0.0.1:8000/api/requests/received/',{
+                const response = await fetch(apiUrl('/api/requests/received/'),{
                 headers:{
                         'Authorization': `Bearer ${localStorage.getItem('access')}`
                     }
@@ -156,7 +157,7 @@ function MentorDashboard({user}){
 
     async function handleRequests(id, action){
         try{
-            const response = await fetch(`http://127.0.0.1:8000/api/requests/${id}/respond/`,{
+            const response = await fetch(apiUrl(`/api/requests/${id}/respond/`),{
             method : "POST",
             headers:{
                         "Content-Type": "application/json",
