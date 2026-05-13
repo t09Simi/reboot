@@ -1,29 +1,30 @@
 # syntax=docker/dockerfile:1
-
-# Base image — slim variant, ~130MB instead of ~1GB
 FROM python:3.14-slim
 
-# Don't buffer stdout/stderr, don't write .pyc files
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-# Working directory inside the container
 WORKDIR /app
 
-# Install Python dependencies first (caches well across rebuilds)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
 COPY . .
 
-# Create non-root user and give it ownership of /app
+# Collect static files at build time for WhiteNoise. Dummy env vars are only
+# used during build; real values from Render override at runtime.
+ENV SECRET_KEY=dummy-for-build \
+    DATABASE_URL=sqlite:///dummy.db
+RUN python manage.py collectstatic --noinput
+ENV SECRET_KEY="" \
+    DATABASE_URL=""
+
 RUN useradd --create-home --uid 1000 appuser && \
     chown -R appuser:appuser /app
 USER appuser
 
-# Document the port the app listens on
 EXPOSE 8000
 
-# Production server — gunicorn, NOT runserver
-CMD ["gunicorn", "reboot.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+# Run migrations then start gunicorn. 1 worker + 2 threads is right-sized
+# for Render's free tier (512MB RAM).
+CMD ["sh", "-c", "python manage.py migrate --noinput && gunicorn reboot.wsgi:application --bind 0.0.0.0:8000 --workers 1 --threads 2"]
