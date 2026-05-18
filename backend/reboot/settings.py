@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "api",
     "trends",
+    "buddy",
 ]
 
 
@@ -218,6 +219,8 @@ CORS_ALLOWED_ORIGINS = config(
     cast=Csv(),
 )
 
+# Anthropic API key for AI Career Buddy
+ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY', default='')
 
 # ---------------------------------------------------------------------------
 # DEFAULT PRIMARY KEY FIELD TYPE
